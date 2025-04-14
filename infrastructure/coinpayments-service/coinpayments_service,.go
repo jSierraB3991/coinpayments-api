@@ -55,7 +55,10 @@ func (coinPaymentService CoinPaymentService) PayChallenge(paymentData coinpaymen
 	if err != nil || httpResponse.StatusCode != 200 {
 		return nil, errors.New(result.Error)
 	}
-	coinPaymentService.repo.UpdateBuyByCoinPayment(result.Result.TXNId, paymentData.BuyId)
+	err = coinPaymentService.repo.UpdateBuyByCoinPayment(result.Result.TXNId, paymentData.BuyId)
+	if err != nil {
+		return nil, err
+	}
 	return &coinpaymentsresponse.PayResponse{
 		Url: result.Result.CheckoutUrl,
 	}, nil
